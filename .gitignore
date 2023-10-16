@@ -1,0 +1,11 @@
+venv
+*.pyc
+__pycahe__/
+media/
+static/
+*.sqlite3
+logs/
+*.pyo
+*.pyd
+my_env/
+log.log

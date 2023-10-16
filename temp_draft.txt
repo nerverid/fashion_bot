@@ -1,0 +1,204 @@
+ChatGPT & Midjourney | AI bot, [09.10.2023 20:31]
+Конечно! Вот пример функции для проверки отправки сообщения пользователю с использованием библиотеки aiogram в Python:
+
+python
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Command
+
+# Создаем экземпляр бота и диспетчера
+bot = Bot(token='YOUR_BOT_TOKEN')
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+
+
+# Функция для отправки сообщения пользователю
+async def send_message(user_id: int, message: str):
+    await bot.send_message(user_id, message)
+
+
+# Обработчик команды /start
+@dp.message_handler(Command('start'))
+async def start_command(message: types.Message, state: FSMContext):
+    # Получаем ID пользователя
+    user_id = message.from_user.id
+    
+    # Отправляем сообщение пользователю
+    await send_message(user_id, 'Привет, это бот!')
+
+    # Сохраняем состояние пользователя (если необходимо)
+    await state.finish()
+
+
+if __name__ == '__main__':
+    # Запускаем бота
+    dp.run_polling()
+
+
+В этом примере функция send_message принимает два аргумента: user_id (ID пользователя) и message (текст сообщения). Она используется в обработчике команды /start, чтобы отправить приветственное сообщение пользователю.
+
+Обратите внимание, что вам нужно будет заменить 'YOUR_BOT_TOKEN' на токен вашего бота. Вы также можете добавить другие обработчики команд и сообщений, а также использовать состояния для управления диалогом с пользователем.
+
+Не забудьте установить aiogram, если еще не сделали этого:
+
+
+pip install aiogram
+
+Костя, [09.10.2023 20:33]
+Напиши отправку сообщений по таймеру без команды /start aiogram python
+
+ChatGPT & Midjourney | AI bot, [09.10.2023 20:34]
+Конечно! Вот пример функции для отправки сообщения пользователю по таймеру с использованием библиотеки aiogram в Python:
+
+python
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+# Создаем экземпляр бота и диспетчера
+bot = Bot(token='YOUR_BOT_TOKEN')
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+
+
+# Функция для отправки сообщения пользователю
+async def send_message(user_id: int, message: str):
+    await bot.send_message(user_id, message)
+
+
+# Функция для отправки сообщения по таймеру
+async def send_message_by_timer(user_id: int, message: str, delay: int):
+    await asyncio.sleep(delay)  # Ожидаем указанное количество секунд
+    await send_message(user_id, message)
+
+
+if __name__ == '__main__':
+    # Получаем ID пользователя
+    user_id = YOUR_USER_ID
+    
+    # Отправляем сообщение пользователю через 10 секунд
+    asyncio.run(send_message_by_timer(user_id, 'Привет, это бот!', 10))
+
+
+В этом примере функция send_message_by_timer принимает три аргумента: user_id (ID пользователя), message (текст сообщения) и delay (задержка в секундах перед отправкой сообщения). Она использует asyncio.sleep для ожидания указанного количества секунд, а затем вызывает функцию send_message для отправки сообщения пользователю.
+
+Вы должны заменить 'YOUR_BOT_TOKEN' на токен вашего бота и YOUR_USER_ID на ID пользователя, которому вы хотите отправить сообщение. Вы также можете изменить задержку (delay) на нужное вам значение.
+
+Обратите внимание, что в этом примере используется asyncio.run для запуска функции send_message_by_timer. Если вы уже выполняете асинхронный код, вы можете использовать другой способ запуска асинхронных функций.
+
+Не забудьте установить aiogram, если еще не сделали этого:
+
+
+pip install aiogram
+
+Костя, [09.10.2023 21:02]
+Напиши отправку сообщений всем пользователям в 12 часов
+
+ChatGPT & Midjourney | AI bot, [09.10.2023 21:04]
+Конечно! Вот пример функции для отправки сообщений всем пользователям в 12 часов с использованием библиотеки aiogram в Python:
+
+python
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+
+# Создаем экземпляр бота и диспетчера
+bot = Bot(token='YOUR_BOT_TOKEN')
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+
+
+# Функция для отправки сообщения всем пользователям
+async def send_message_to_all_users(message: str):
+    # Получаем список всех пользователей
+    users = await bot.get_chat_members(chat_id='YOUR_CHAT_ID')
+    
+    for user in users:
+        user_id = user.user.id
+        await bot.send_message(user_id, message)
+        await asyncio.sleep(1)  # Ожидаем 1 секунду между отправкой сообщений
+
+
+if __name__ == '__main__':
+    # Отправляем сообщение всем пользователям в 12 часов
+    asyncio.run(send_message_to_all_users('Привет, это бот!'))
+
+
+В этом примере функция send_message_to_all_users принимает один аргумент message (текст сообщения). Она использует bot.get_chat_members для получения списка всех пользователей в чате (вам нужно заменить 'YOUR_CHAT_ID' на ID вашего чата). Затем она перебирает каждого пользователя и отправляет им сообщение с помощью bot.send_message. Между отправкой каждого сообщения мы добавляем задержку в 1 секунду с помощью asyncio.sleep, чтобы не превысить ограничения API Telegram.
+
+Вы должны заменить 'YOUR_BOT_TOKEN' на токен вашего бота и 'YOUR_CHAT_ID' на ID вашего чата. Также вы можете изменить текст сообщения ('Привет, это бот!') на нужное вам значение.
+
+Обратите внимание, что в этом примере также используется asyncio.run для запуска функции send_message_to_all_users. Если вы уже выполняете асинхронный код, вы можете использовать другой способ запуска асинхронных функций.
+
+Не забудьте установить aiogram, если еще не сделали этого:
+
+
+pip install aiogram
+
+Костя, [09.10.2023 23:27]
+Напиши, пожалуйста, функцию выборки последних записей из базы данных aiogram python
+
+ChatGPT & Midjourney | AI bot, [09.10.2023 23:28]
+Конечно! Вот пример функции для выборки последних записей из базы данных aiogram в Python:
+
+python
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram import types
+
+# Создаем экземпляр бота и диспетчера
+bot = Bot(token='YOUR_BOT_TOKEN')
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+
+
+# Функция для выборки последних записей из базы данных
+async def get_last_records(limit: int):
+    # Получаем список последних сообщений из базы данных
+    messages = await types.Message.query.order_by(types.Message.date.desc()).limit(limit).gino.all()
+    
+    return messages
+
+
+if __name__ == '__main__':
+    # Выбираем последние 10 записей из базы данных
+    asyncio.run(get_last_records(10))
+
+
+В этом примере функция get_last_records принимает один аргумент limit (количество записей, которые нужно выбрать). Она использует types.Message.query для выполнения запроса к базе данных и выборки последних сообщений. Метод order_by с аргументом types.Message.date.desc() сортирует записи по дате в порядке убывания. Метод limit ограничивает количество выбранных записей. Метод gino.all() выполняет запрос и возвращает результаты.
+
+Вы должны заменить 'YOUR_BOT_TOKEN' на токен вашего бота. Также вы можете изменить количество выбираемых записей (10) на нужное вам значение.
+
+Обратите внимание, что в этом примере также используется asyncio.run для запуска функции get_last_records. Если вы уже выполняете асинхронный код, вы можете использовать другой способ запуска асинхронных функций.
+
+Не забудьте установить aiogram и gino, если еще не сделали этого:
+
+
+pip install aiogram
+pip install gino
+
+Конечно! Вот пример функции, которая создает InlineKeyboardButton из текстового файла ini, где каждая строка представляет собой отдельную кнопку:
+
+python
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+def create_inline_keyboard(file_path):
+    keyboard = InlineKeyboardMarkup()
+    
+    with open(file_path, 'r') as file:
+        for line in file:
+            button_text = line.strip()
+            button = InlineKeyboardButton(text=button_text, callback_data=button_text)
+            keyboard.add(button)
+    
+    return keyboard
+
+
+Вы можете использовать эту функцию, передавая ей путь к вашему текстовому файлу ini. Она будет читать каждую строку из файла и создавать соответствующую кнопку InlineKeyboardButton. Затем все кнопки будут добавлены в InlineKeyboardMarkup, который будет возвращен как результат.
+
+Пример использования:
+
+python
+keyboard = create_inline_keyboard('buttons.ini')
