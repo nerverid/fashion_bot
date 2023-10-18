@@ -1,8 +1,9 @@
+import aiogram
+from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
-    InlineKeyboardMarkup, InlineKeyboardButton, \
-    types
-from aiogram import Bot, Dispatcher, executor, types
+    InlineKeyboardMarkup, InlineKeyboardButton
+
 
 button_role = KeyboardButton("Change Role")
 button_styles = KeyboardButton("Styles")
