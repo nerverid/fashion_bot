@@ -1,2 +1,2 @@
-TOKEN = '6175122503:AAF0sZN73EYRRykhS0WkEDUnVPizAhW0Rsc'
+TOKEN = ''
 LOG = 'log.log'
