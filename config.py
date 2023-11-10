@@ -1,2 +1,0 @@
-TOKEN = ''
-LOG = 'log.log'

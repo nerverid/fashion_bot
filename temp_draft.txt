@@ -186,7 +186,6 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 def create_inline_keyboard(file_path):
     keyboard = InlineKeyboardMarkup()
-    
     with open(file_path, 'r') as file:
         for line in file:
             button_text = line.strip()
@@ -201,4 +200,44 @@ def create_inline_keyboard(file_path):
 Пример использования:
 
 python
-keyboard = create_inline_keyboard('buttons.ini')
+ 
+
+
+Конечно! Вот пример кода, который создает кнопку "Reply" с использованием библиотеки aiogram и обрабатывает нажатие на нее:
+
+python
+from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Command
+
+# Создаем экземпляр бота
+bot = Bot(token='YOUR_TOKEN')
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+
+# Обработчик команды /start
+@dp.message_handler(Command('start'))
+async def start_command(message: types.Message):
+    # Создаем кнопку "Reply"
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    button = types.KeyboardButton(text="Reply")
+    keyboard.add(button)
+    
+    # Отправляем сообщение с кнопкой
+    await message.reply("Нажми кнопку", reply_markup=keyboard)
+
+# Обработчик нажатия на кнопку "Reply"
+@dp.message_handler(text="Reply")
+async def reply_button_handler(message: types.Message):
+    await message.answer("Ты нажал кнопку Reply!")
+
+# Запускаем бота
+if __name__ == '__main__':
+    from aiogram import executor
+    executor.start_polling(dp)
+
+
+В этом примере мы создаем кнопку "Reply" с помощью types.KeyboardButton и добавляем ее в types.ReplyKeyboardMarkup. Затем мы отправляем сообщение с этой клавиатурой в ответ на команду /start.
+
+Когда пользователь нажимает кнопку "Reply", срабатывает обработчик reply_button_handler, который отправляет ответное сообщение.
